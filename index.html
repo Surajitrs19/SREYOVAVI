@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sreyovavi Mahotsav - Accommodation Portal</title>
+    <style>
+        :root {
+            --primary: #800020;
+            --secondary: #d4af37;
+            --bg-color: #faf6f0;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+        }
+        /* Intro Animation Banner */
+        .intro-animation {
+            background: linear-gradient(135deg, #800020, #4a0012);
+            color: #d4af37;
+            text-align: center;
+            padding: 25px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .intro-animation h1 {
+            margin: 0;
+            font-size: 28px;
+            letter-spacing: 2px;
+            animation: fadeInOut 2s infinite alternate;
+        }
+        .intro-animation h2 {
+            margin: 8px 0 0 0;
+            font-size: 20px;
+            color: #ffffff;
+            font-weight: 400;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0.7; transform: scale(0.98); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+            border-top: 5px solid var(--secondary);
+        }
+        .admin-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+        }
+        h2.title {
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            color: #444;
+        }
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+        input:focus, select:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 6px rgba(212, 175, 55, 0.3);
+        }
+        .btn {
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 5px;
+        }
+        .btn:hover { background: #600018; }
+        .btn-secondary { background: #6c757d; margin-top: 10px; }
+        .btn-secondary:hover { background: #5a6268; }
+        
+        .nav-switch {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .nav-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .nav-switch a:hover { text-decoration: underline; }
+
+        /* Tables & Tabs for Admin */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #dee2e6;
+            padding-bottom: 10px;
+        }
+        .tab-btn {
+            padding: 10px 25px;
+            background: #e9ecef;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 6px;
+            font-size: 15px;
+            color: #495057;
+        }
+        .tab-btn.active { background: var(--primary); color: white; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #dee2e6; padding: 12px; text-align: left; font-size: 14px; vertical-align: middle; }
+        th { background: #f8f9fa; color: #495057; }
+        
+        .textarea-box { width: 100%; height: 60px; padding: 8px; border: 1px solid #ced4da; border-radius: 4px; font-size: 13px; resize: none; }
+        .action-btns { display: flex; flex-direction: column; gap: 6px; margin-top: 5px; }
+        .btn-approve { background: #28a745; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 13px; cursor: pointer; text-align: center; text-decoration: none; }
+        .btn-reject { background: #dc3545; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 13px; cursor: pointer; text-align: center; }
+        .btn-wa { background: #25D366; color: white; border: none; padding: 6px 10px; border-radius: 4px; font-size: 13px; cursor: pointer; text-align: center; text-decoration: none; }
+        
+        .status-badge { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; }
+        .status-Pending { background: #ffc107; color: #212529; }
+        .status-Approved { background: #d4edda; color: #155724; }
+        .status-Rejected { background: #f8d7da; color: #721c24; }
+
+        .hidden { display: none; }
+        .success-msg { background: #d4edda; color: #155724; padding: 12px; border-radius: 6px; text-align: center; margin-top: 15px; font-weight: 500; }
+        .status-box { background: #fff3cd; padding: 15px; border-radius: 8px; margin-top: 15px; border-left: 5px solid var(--secondary); }
+        .loading { text-align: center; color: #666; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <!-- Intro Animation Section -->
+    <div class="intro-animation">
+        <h1>JOY GURU</h1>
+        <h2>WELCOME SREYOVAVI MAHOTSAV</h2>
+    </div>
+
+    <!-- ================= SECTION 1: DEVOTEE PORTAL ================= -->
+    <div class="container" id="devotee-portal">
+        <h2 class="title" id="devotee-title">Devotee Login (OTP)</h2>
+        
+        <!-- Step 1: Mobile Login & OTP -->
+        <div id="login-section">
+            <div class="form-group">
+                <label>10-Digit Mobile Number</label>
+                <input type="tel" id="mobileNumber" placeholder="Enter mobile number" maxlength="10">
+            </div>
+            <button class="btn" onclick="sendOTP()">Get OTP</button>
+            
+            <div id="otp-group" class="hidden" style="margin-top: 15px;">
+                <div class="form-group">
+                    <label>Enter 4-Digit OTP (e.g., 1234)</label>
+                    <input type="text" id="otpInput" placeholder="Enter OTP" maxlength="4">
+                </div>
+                <button class="btn" onclick="verifyOTP()">Verify & Proceed</button>
+            </div>
+
+            <div class="nav-switch">
+                <p>Already applied? <a onclick="switchToStatusCheck()">Check Application Status</a></p>
+                <p style="margin-top: 10px;"><a onclick="switchToAdmin()" style="color: #666; font-size: 13px;">🔒 Admin Panel Login</a></p>
+            </div>
+        </div>
+
+        <!-- Step 2: Accommodation Form -->
+        <div id="form-section" class="hidden">
+            <form id="accommodationForm" onsubmit="submitAccommodation(event)">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter full name" required>
+                </div>
+                <div class="form-group">
+                    <label>12-Digit Family Code</label>
+                    <input type="text" id="familyCode" placeholder="Enter 12-digit family code" maxlength="12" required>
+                </div>
+                <div class="form-group">
+                    <label>10-Digit Mobile Number</label>
+                    <input type="tel" id="formPhone" placeholder="Mobile number" required readonly style="background: #e9ecef;">
+                </div>
+                <div class="form-group">
+                    <label>Worker Category</label>
+                    <select id="workerCategory" required>
+                        <option value="">Select Category</option>
+                        <option value="SPR">SPR</option>
+                        <option value="WORKER">WORKER</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Member Count</label>
+                    <select id="memberCount" required>
+                        <option value="">Select Members</option>
+                        <option value="1">1 Member</option>
+                        <option value="2">2 Members</option>
+                        <option value="3">3 Members</option>
+                        <option value="4">4 Members</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Submit Application</button>
+            </form>
+            <div id="successMessage" class="hidden success-msg">Application submitted successfully!</div>
+        </div>
+
+        <!-- Step 3: Status Check -->
+        <div id="status-section" class="hidden">
+            <div class="form-group">
+                <label>Enter 12-Digit Family Code</label>
+                <input type="text" id="searchFamilyCode" placeholder="Enter Family Code" maxlength="12">
+            </div>
+            <button class="btn" onclick="checkStatus()">Check Status</button>
+            <button class="btn btn-secondary" onclick="backToLoginFromStatus()">Back to Login</button>
+            
+            <div id="statusResult" class="hidden"></div>
+        </div>
+    </div>
+
+    <!-- ================= SECTION 2: ADMIN PANEL ================= -->
+    <div class="admin-container hidden" id="admin-portal">
+        <h2 class="title">Admin Accommodation Management Portal</h2>
+        
+        <!-- Admin Login Screen (Only 8918783864) -->
+        <div id="admin-login-screen" style="max-width: 400px; margin: 30px auto;">
+            <div class="form-group">
+                <label>Admin Mobile Number</label>
+                <input type="password" id="adminPhoneInput" placeholder="Enter admin mobile number" maxlength="10">
+            </div>
+            <button class="btn" onclick="verifyAdminLogin()">Login Admin</button>
+            <div class="nav-switch">
+                <a onclick="backToDevoteePortal()">← Back to Devotee Portal</a>
+            </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="tabs" style="margin-bottom: 0; border: none;">
+                    <button class="tab-btn active" onclick="switchAdminTab('SPR')">SPR Section</button>
+                    <button class="tab-btn" onclick="switchAdminTab('WORKER')">WORKER Section</button>
+                </div>
+                <button class="btn-secondary" style="width: auto; padding: 8px 15px; margin: 0;" onclick="logoutAdmin()">Logout</button>
+            </div>
+
+            <div id="admin-table-content"></div>
+        </div>
+    </div>
+
+    <!-- Firebase CDN -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js"></script>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAbcDEF123GHIJKLmnoPQRSTuvwxyz789",
+            authDomain: "sreyovavi-mahotsav.firebaseapp.com",
+            databaseURL: "https://sreyovavi-mahotsav-default-rtdb.firebaseio.com",
+            projectId: "sreyovavi-mahotsav",
+            storageBucket: "sreyovavi-mahotsav.appspot.com",
+            messagingSenderId: "123456789012",
+            appId: "1:123456789012:web:abcdef1234567890ghijk"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+
+        let verifiedMobile = "";
+        let currentAdminTab = "SPR";
+
+        function sendOTP() {
+            const mob = document.getElementById('mobileNumber').value.trim();
+            if(mob.length !== 10) {
+                alert('Please enter a valid 10-digit mobile number.');
+                return;
+            }
+            verifiedMobile = mob;
+            alert('OTP sent successfully to ' + mob);
+            document.getElementById('otp-group').classList.remove('hidden');
+        }
+
+        function verifyOTP() {
+            const otp = document.getElementById('otpInput').value.trim();
+            if(otp === "") {
+                alert('Please enter OTP.');
+                return;
+            }
+            document.getElementById('devotee-title').innerText = "Accommodation Form Submission";
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('form-section').classList.remove('hidden');
+            document.getElementById('formPhone').value = verifiedMobile;
+        }
+
+        function switchToStatusCheck() {
+            document.getElementById('devotee-title').innerText = "Check Accommodation Status";
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('status-section').classList.remove('hidden');
+        }
+
+        function backToLoginFromStatus() {
+            document.getElementById('devotee-title').innerText = "Devotee Login (OTP)";
+            document.getElementById('status-section').classList.add('hidden');
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('statusResult').classList.add('hidden');
+        }
+
+        function submitAccommodation(e) {
+            e.preventDefault();
+            const appData = {
+                fullName: document.getElementById('fullName').value.trim(),
+                familyCode: document.getElementById('familyCode').value.trim(),
+                phone: verifiedMobile,
+                category: document.getElementById('workerCategory').value,
+                members: document.getElementById('memberCount').value,
+                status: 'Pending',
+                customMessage: '',
+                timestamp: new Date().toISOString()
+            };
+
+            // Save to Firebase
+            database.ref('applications/' + appData.familyCode).set(appData, (error) => {
+                if (error) {
+                    alert('Error submitting application. Please try again.');
+                    console.error(error);
+                } else {
+                    document.getElementById('successMessage').classList.remove('hidden');
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        }
+
+        function checkStatus() {
+            const fCode = document.getElementById('searchFamilyCode').value.trim();
+            const resBox = document.getElementById('statusResult');
+            if(!fCode) {
+                alert('Please enter Family Code.');
+                return;
+            }
+
+            resBox.innerHTML = '<div class="loading">Loading...</div>';
+            resBox.classList.remove('hidden');
+
+            // Fetch from Firebase
+            database.ref('applications/' + fCode).once('value', (snapshot) => {
+                if (snapshot.exists()) {
+                    const found = snapshot.val();
+                    let color = found.status === 'Approved' ? '#28a745' : found.status === 'Rejected' ? '#dc3545' : '#ffc107';
+                    resBox.innerHTML = `
+                        <div class="status-box">
+                            <p><strong>Name:</strong> ${found.fullName}</p>
+                            <p><strong>Category:</strong> ${found.category}</p>
+                            <p><strong>Status:</strong> <span style="color: ${color}; font-weight: bold; font-size: 16px;">${found.status}</span></p>
+                            <p><strong>Message / Location:</strong> ${found.customMessage || 'Waiting for admin approval message.'}</p>
+                        </div>
+                    `;
+                } else {
+                    resBox.innerHTML = `<div class="status-box" style="border-left-color: #dc3545; background: #f8d7da;"><p>No application found with this family code.</p></div>`;
+                }
+            });
+        }
+
+        // Admin Navigation & Logic
+        function switchToAdmin() {
+            document.getElementById('devotee-portal').classList.add('hidden');
+            document.getElementById('admin-portal').classList.remove('hidden');
+        }
+
+        function backToDevoteePortal() {
+            document.getElementById('admin-portal').classList.add('hidden');
+            document.getElementById('devotee-portal').classList.remove('hidden');
+        }
+
+        function verifyAdminLogin() {
+            const val = document.getElementById('adminPhoneInput').value.trim();
+            if(val === "8918783864") {
+                document.getElementById('admin-login-screen').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                loadAdminTable();
+            } else {
+                alert("Access Denied! Only authorized admin number can login.");
+            }
+        }
+
+        function logoutAdmin() {
+            document.getElementById('adminPhoneInput').value = "";
+            document.getElementById('admin-dashboard').classList.add('hidden');
+            document.getElementById('admin-login-screen').classList.remove('hidden');
+        }
+
+        function switchAdminTab(cat) {
+            currentAdminTab = cat;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            loadAdminTable();
+        }
+
+        function loadAdminTable() {
+            const container = document.getElementById('admin-table-content');
+            container.innerHTML = '<div class="loading">Loading applications...</div>';
+
+            // Fetch from Firebase
+            database.ref('applications').once('value', (snapshot) => {
+                let apps = [];
+                snapshot.forEach((childSnapshot) => {
+                    apps.push({
+                        key: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                let filtered = apps.filter(a => a.category === currentAdminTab);
+
+                if(filtered.length === 0) {
+                    container.innerHTML = `<div style="text-align: center; color: #777; padding: 30px;">No applications found in ${currentAdminTab} section.</div>`;
+                    return;
+                }
+
+                let html = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th width="25%">Family Code & Name</th>
+                                <th width="20%">Details</th>
+                                <th width="35%">Allotment Message (Location & Contact)</th>
+                                <th width="20%">Status & WhatsApp Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                `;
+
+                filtered.forEach((app) => {
+                    let waText = encodeURIComponent(`Sreyovavi Mahotsav Update: Dear ${app.fullName}, your accommodation status is *${app.status}*. Details: ${app.customMessage || 'N/A'}`);
+                    let waLink = `https://wa.me/91${app.phone}?text=${waText}`;
+
+                    html += `
+                        <tr>
+                            <td>
+                                <strong>Code:</strong> ${app.familyCode}<br>
+                                <strong>Name:</strong> ${app.fullName}
+                            </td>
+                            <td>
+                                <strong>Phone:</strong> ${app.phone}<br>
+                                <strong>Members:</strong> ${app.members}
+                            </td>
+                            <td>
+                                <textarea id="msg_${app.key}" class="textarea-box" placeholder="Enter location & contact number...">${app.customMessage || ''}</textarea>
+                            </td>
+                            <td>
+                                <span class="status-badge status-${app.status}">${app.status}</span><br><br>
+                                <div class="action-btns">
+                                    <button class="btn-approve" onclick="updateAppStatus('${app.key}', 'Approved')">✔ Approve</button>
+                                    <button class="btn-reject" onclick="updateAppStatus('${app.key}', 'Rejected')">✖ Reject</button>
+                                    <a href="${waLink}" target="_blank" class="btn-wa">💬 WhatsApp Msg</a>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                html += `</tbody></table>`;
+                container.innerHTML = html;
+            });
+        }
+
+        function updateAppStatus(key, newStatus) {
+            const msg = document.getElementById(`msg_${key}`).value.trim();
+
+            if(newStatus === 'Approved' && !msg) {
+                alert('Please write location and contact number message before approving.');
+                return;
+            }
+
+            // Update in Firebase
+            database.ref('applications/' + key).update({
+                status: newStatus,
+                customMessage: msg
+            }, (error) => {
+                if (error) {
+                    alert('Error updating status. Please try again.');
+                    console.error(error);
+                } else {
+                    alert(`Status updated to ${newStatus}! Now click the WhatsApp button to send details to devotee's phone number.`);
+                    loadAdminTable();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
